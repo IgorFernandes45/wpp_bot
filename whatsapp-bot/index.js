@@ -1,4 +1,5 @@
 const wppconnect = require('@wppconnect-team/wppconnect');
+const puppeteer = require('puppeteer-extra'); // garante compatibilidade no Render
 const {
   buscarCategorias,
   buscarProdutosPorCategoria,
@@ -10,9 +11,16 @@ const {
 const NUM_ADMIN = '5561993434314@c.us';
 const sessoes = {};
 
-wppconnect.create({ session: 'bot-avancado' })
-  .then(client => start(client))
-  .catch(err => console.error(err));
+// Cria a sessão do bot
+wppconnect.create({
+  session: 'bot-avancado',
+  puppeteerOptions: {
+    headless: true,
+    args: ['--no-sandbox', '--disable-setuid-sandbox']
+  }
+})
+.then(client => start(client))
+.catch(err => console.error('Erro ao iniciar o bot:', err));
 
 function start(client) {
   client.onMessage(async message => {
@@ -63,7 +71,6 @@ function start(client) {
         case 'buscarProduto': {
           let produtos = await buscarProdutosPorNome(texto);
 
-          // Se não achou nada, verifica se é o nome de uma categoria
           const categorias = await buscarCategorias();
           const categoriaDigitada = categorias.find(c => c.toLowerCase() === texto.toLowerCase());
           if (categoriaDigitada) {
@@ -121,7 +128,6 @@ function start(client) {
           session.pedido.push(item);
           session.total += item.subtotal;
 
-          // Pergunta se deseja adicionar outro produto
           await client.sendText(from, '✅ Produto adicionado! Deseja adicionar outro produto? (s/n)');
           session.etapa = 'adicionarOutro';
           break;
