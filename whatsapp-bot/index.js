@@ -7,7 +7,7 @@ const {
   registrarVenda
 } = require('./database');
 
-const NUM_ADMIN = '5561993427314@c.us';
+const NUM_ADMIN = '5561993434314@c.us';
 const sessoes = {};
 
 wppconnect.create({ session: 'bot-avancado' })
