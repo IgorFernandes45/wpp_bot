@@ -1,0 +1,17 @@
+# Node
+node_modules/
+npm-debug.log
+
+# Tokens e dados do WhatsApp
+whatsapp-bot/tokens/
+
+# Arquivos de cache do Chrome/WhatsApp
+whatsapp-bot/**/Default/
+whatsapp-bot/**/GrShaderCache/
+whatsapp-bot/**/ShaderCache/
+whatsapp-bot/**/GraphiteDawnCache/
+
+# Logs e bancos locais
+*.log
+*.db
+*.db-journal
