@@ -1,5 +1,5 @@
 const wppconnect = require('@wppconnect-team/wppconnect');
-const puppeteer = require('puppeteer'); // Chromium embutido
+const puppeteer = require('puppeteer'); // importante para pegar o chromium
 const {
   buscarCategorias,
   buscarProdutosPorCategoria,
@@ -11,17 +11,22 @@ const {
 const NUM_ADMIN = '5561993434314@c.us';
 const sessoes = {};
 
-// Cria a sessão do WPPConnect com Chromium interno
-wppconnect.create({
-  session: 'bot-avancado',
-  puppeteerOptions: {
-    headless: true,
-    executablePath: puppeteer.executablePath(), // Chromium embutido
-    args: ['--no-sandbox', '--disable-setuid-sandbox']
+async function startBot() {
+  try {
+    const client = await wppconnect.create({
+      session: 'bot-avancado',
+      puppeteerOptions: {
+        headless: true,
+        executablePath: puppeteer.executablePath(), // garante Chromium do Puppeteer
+        args: ['--no-sandbox', '--disable-setuid-sandbox']
+      }
+    });
+    console.log('✅ Bot iniciado!');
+    start(client);
+  } catch (err) {
+    console.error('Erro ao iniciar o bot:', err);
   }
-})
-.then(client => start(client))
-.catch(err => console.error('Erro ao iniciar o bot:', err));
+}
 
 function start(client) {
   client.onMessage(async message => {
@@ -49,8 +54,6 @@ function start(client) {
 
     try {
       switch (session.etapa) {
-
-        // MENU INICIAL
         case 'inicio':
           await client.sendText(from, "Olá! 😄\n1 - Pedir entrega\n2 - Consultar preço");
           session.etapa = 'menu';
@@ -68,15 +71,11 @@ function start(client) {
           }
           break;
 
-        // BUSCAR PRODUTO
         case 'buscarProduto': {
           let produtos = await buscarProdutosPorNome(texto);
-
           const categorias = await buscarCategorias();
           const categoriaDigitada = categorias.find(c => c.toLowerCase() === texto.toLowerCase());
-          if (categoriaDigitada) {
-            produtos = await buscarProdutosPorCategoria(categoriaDigitada);
-          }
+          if (categoriaDigitada) produtos = await buscarProdutosPorCategoria(categoriaDigitada);
 
           if (!produtos.length) {
             await client.sendText(from, '❌ Nenhum produto encontrado. Digite outro nome ou categoria:');
@@ -142,16 +141,13 @@ function start(client) {
             const enderecos = await buscarEnderecos();
             session.enderecos = enderecos;
             let listaEnd = '📍 Escolha o bairro:\n';
-            enderecos.forEach((e,i) => {
-              listaEnd += `${i+1} - ${e.nome} (Taxa: R$ ${Number(e.taxa).toFixed(2)})\n`;
-            });
+            enderecos.forEach((e,i) => listaEnd += `${i+1} - ${e.nome} (Taxa: R$ ${Number(e.taxa).toFixed(2)})\n`);
             listaEnd += '\nDigite o número do bairro:';
             session.etapa = 'endereco';
             await client.sendText(from, listaEnd);
           }
           break;
 
-        // ENDEREÇO
         case 'endereco': {
           const idxEnd = parseInt(texto) - 1;
           if (isNaN(idxEnd) || !session.enderecos[idxEnd]) {
@@ -177,7 +173,6 @@ function start(client) {
           break;
         }
 
-        // PAGAMENTO
         case 'pagamento': {
           let forma;
           switch (texto) {
@@ -236,4 +231,6 @@ function start(client) {
     }
   });
 }
+
+startBot();
 
