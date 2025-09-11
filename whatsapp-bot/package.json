@@ -1,0 +1,22 @@
+{
+  "name": "whatsapp-bot",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@huggingface/inference": "^4.6.1",
+    "@wppconnect-team/wppconnect": "^1.37.3",
+    "axios": "^1.11.0",
+    "dotenv": "^17.2.1",
+    "fuse.js": "^7.1.0",
+    "mysql2": "^3.14.2",
+    "openai": "^5.10.2",
+    "sqlite3": "^5.1.7"
+  }
+}

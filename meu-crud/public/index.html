@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>CRUD Produtos</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>CRUD Produtos</h1>
+  <button id="btnVendas">Listar Vendas</button>
+  <h2>Adicionar/Editar Produto</h2>
+  
+  <form id="formProduto">
+    <input type="hidden" id="produtoCodigo">
+    <input type="text" id="produto" placeholder="Produto" required>
+    <input type="number" step="0.01" id="preco" placeholder="Preço" required>
+    <input type="number" step="0.01" id="tx_credito" placeholder="Tx Crédito" required>
+    <input type="number" step="0.01" id="tx_debito" placeholder="Tx Débito" required>
+    <input type="text" id="categoria" placeholder="Categoria" required>
+    <button type="submit">Salvar</button>
+    <button type="button" id="cancelar">Cancelar</button>
+  </form>
+
+  <h2>Produtos</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Código</th>
+        <th>Produto</th>
+        <th>Preço</th>
+        <th>Tx Crédito</th>
+        <th>Tx Débito</th>
+        <th>Categoria</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody id="produtosBody"></tbody>
+  </table>
+
+  <script src="script.js"></script>
+</body>
+</html>

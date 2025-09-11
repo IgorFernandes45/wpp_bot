@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Vendas</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Vendas Realizadas</h1>
+  <button class="btnVoltar" onclick="window.location.href='index.html'">Voltar para Produtos</button>
+
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Produto</th>
+        <th>Quantidade</th>
+        <th>Preço Unitário</th>
+        <th>Subtotal</th>
+        <th>Taxa de Entrega</th>
+        <th>Valor Total</th>
+        <th>Pagamento</th>
+        <th>Endereço</th>
+        <th>Data/Hora</th>
+      </tr>
+    </thead>
+    <tbody id="vendasBody"></tbody>
+  </table>
+
+  <script>
+    async function carregarVendas() {
+      const res = await fetch('/api/vendas');
+      const vendas = await res.json();
+      const tbody = document.getElementById('vendasBody');
+      tbody.innerHTML = '';
+      vendas.forEach(v => {
+        tbody.innerHTML += `
+          <tr>
+            <td>${v.id}</td>
+            <td>${v.produto}</td>
+            <td>${v.quantidade}</td>
+            <td>R$ ${v.preco_unitario.toFixed(2)}</td>
+            <td>R$ ${v.subtotal.toFixed(2)}</td>
+            <td>R$ ${v.taxa_entrega.toFixed(2)}</td>
+            <td>R$ ${v.valor_total.toFixed(2)}</td>
+            <td>${v.pagamento}</td>
+            <td>${v.endereco}</td>
+            <td>${new Date(v.data_hora).toLocaleString()}</td>
+          </tr>
+        `;
+      });
+    }
+
+    carregarVendas();
+  </script>
+</body>
+</html>
