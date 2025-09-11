@@ -1,5 +1,5 @@
 const wppconnect = require('@wppconnect-team/wppconnect');
-const puppeteer = require('puppeteer'); // Import necessário para pegar o Chromium embutido
+const puppeteer = require('puppeteer'); // Chromium embutido
 const {
   buscarCategorias,
   buscarProdutosPorCategoria,
@@ -11,7 +11,7 @@ const {
 const NUM_ADMIN = '5561993434314@c.us';
 const sessoes = {};
 
-// Criação do cliente WPPConnect
+// Cria a sessão do WPPConnect com Chromium interno
 wppconnect.create({
   session: 'bot-avancado',
   puppeteerOptions: {
@@ -71,9 +71,12 @@ function start(client) {
         // BUSCAR PRODUTO
         case 'buscarProduto': {
           let produtos = await buscarProdutosPorNome(texto);
+
           const categorias = await buscarCategorias();
           const categoriaDigitada = categorias.find(c => c.toLowerCase() === texto.toLowerCase());
-          if (categoriaDigitada) produtos = await buscarProdutosPorCategoria(categoriaDigitada);
+          if (categoriaDigitada) {
+            produtos = await buscarProdutosPorCategoria(categoriaDigitada);
+          }
 
           if (!produtos.length) {
             await client.sendText(from, '❌ Nenhum produto encontrado. Digite outro nome ou categoria:');
@@ -233,3 +236,4 @@ function start(client) {
     }
   });
 }
+

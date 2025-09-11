@@ -3,16 +3,16 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
     "postinstall": "npx puppeteer install"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
+  "description": "Bot de WhatsApp com Wppconnect e Puppeteer para Render",
   "dependencies": {
     "@huggingface/inference": "^4.6.1",
-    "@wppconnect-team/wppconnect": "^1.37.3",
+    "@wppconnect-team/wppconnect": "^1.37.4",
     "axios": "^1.11.0",
     "dotenv": "^17.2.1",
     "fuse.js": "^7.1.0",
