@@ -1,5 +1,8 @@
 const wppconnect = require('@wppconnect-team/wppconnect');
-const puppeteer = require('puppeteer'); // importante para pegar o chromium
+const puppeteerExtra = require('puppeteer-extra');
+const StealthPlugin = require('puppeteer-extra-plugin-stealth');
+puppeteerExtra.use(StealthPlugin());
+
 const {
   buscarCategorias,
   buscarProdutosPorCategoria,
@@ -15,9 +18,9 @@ async function startBot() {
   try {
     const client = await wppconnect.create({
       session: 'bot-avancado',
+      browserInstance: puppeteerExtra,
       puppeteerOptions: {
         headless: true,
-        executablePath: puppeteer.executablePath(), // garante Chromium do Puppeteer
         args: ['--no-sandbox', '--disable-setuid-sandbox']
       }
     });
@@ -205,10 +208,9 @@ function start(client) {
           let resumoAdmin = `📦 Novo Pedido!\n`;
           session.pedido.forEach(i => resumoAdmin += `• ${i.produto} x${i.quantidade} = R$ ${i.subtotal.toFixed(2)}\n`);
           resumoAdmin += `📍 Endereço: ${session.enderecoCompleto} - (${session.enderecoBairro})\n`;
-          resumoAdmin += `🚚 Entrega: R$ ${session.taxaEntrega.toFixed(2)}\n`;
-          if (taxaCartao > 0) resumoAdmin += `💳 Taxa cartão: R$ ${taxaCartao.toFixed(2)}\n`;
-          resumoAdmin += `💰 Total: R$ ${totalFinal.toFixed(2)}\n`;
+                    resumoAdmin += `💰 Total: R$ ${totalFinal.toFixed(2)}\n`;
           resumoAdmin += `🕒 ${new Date().toLocaleString()}`;
+
           await client.sendText(NUM_ADMIN, resumoAdmin);
 
           let textoCliente = `✅ Pedido confirmado!\n💰 Total: R$ ${totalFinal.toFixed(2)}\n🚚 Entrega: R$ ${session.taxaEntrega.toFixed(2)}`;
@@ -233,4 +235,3 @@ function start(client) {
 }
 
 startBot();
-

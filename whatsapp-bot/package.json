@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "postinstall": "npx puppeteer install"
+    "postinstall": "npx puppeteer browsers install chromium"
   },
   "keywords": [],
   "author": "",
@@ -19,6 +19,8 @@
     "mysql2": "^3.14.2",
     "openai": "^5.10.2",
     "puppeteer": "^24.21.0",
+    "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2",
     "sqlite3": "^5.1.7"
   }
 }
